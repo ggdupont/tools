@@ -88,10 +88,11 @@ fi
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias ll='ls -alF'
+alias ll='ls -halF'
 alias la='ls -A'
 alias l='ls -CF'
 alias x='exit'
+alias bunk='play -n synth 0.1 sin 880 || echo -e "\a"'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -124,3 +125,14 @@ source ~/src/tools/git-prompt.sh
 export PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " (%s)")\$'
 
 export PATH=/home/gdupont/byobu/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/opt/cuda/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+
+MAVEN_OPTS="-Xms1024m -Xmx3076m -XX:MaxPermSize=256m"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/gdupont/Downloads/google-cloud-sdk/path.bash.inc' ]; then source '/home/gdupont/Downloads/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/gdupont/Downloads/google-cloud-sdk/completion.bash.inc' ]; then source '/home/gdupont/Downloads/google-cloud-sdk/completion.bash.inc'; fi
+
+# added by Anaconda3 installer
+export PATH="/home/gdupont/anaconda3/bin:$PATH"
