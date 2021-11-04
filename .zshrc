@@ -9,7 +9,28 @@ export ZSH="/Users/gdupont/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # ZSH_THEME="robbyrussell"
-ZSH_THEME="powerlevel9k/powerlevel9k"
+
+DEFAULT_USER="$USER"
+
+ZSH_THEME="powerlevel10k/powerlevel10k"
+#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(history)
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=5
+
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor root line)
+ZSH_HIGHLIGHT_PATTERNS=('rm -rf *' 'fg=white,bold,bg=red')
+
+plugins=(
+  brew
+  git
+  gradle
+  ng
+  npm
+  yarn
+  zsh-autosuggestions
+  osx
+  sdkman
+  history-substring-search
+)
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -76,7 +97,8 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # ensure python virtual env are displayed
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time virtualenv)
+# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time virtualenv)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time anaconda)
 export VIRTUAL_ENV_DISABLE_PROMPT=
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -102,8 +124,8 @@ export LANG=en_US.UTF-8
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-if [ -f ~/src/github.com/ggdupont/tools/.bash_aliases ]; then
-    . ~/src/github.com/ggdupont/tools/.bash_aliases
+if [ -f ~/src/github/ggdupont/tools/.bash_aliases ]; then
+    . ~/src/github/ggdupont/tools/.bash_aliases
 fi
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
@@ -111,31 +133,22 @@ export SDKMAN_DIR="/Users/gdupont/.sdkman"
 [[ -s "/Users/gdupont/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/gdupont/.sdkman/bin/sdkman-init.sh"
 
 # for jenv
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
+# export PATH="$HOME/.jenv/bin:$PATH"
+# eval "$(jenv init -)"
 
 # for python mess & pyenv
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/gdupont/Applications/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/gdupont/Applications/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/gdupont/Applications/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/gdupont/Applications/google-cloud-sdk/completion.zsh.inc'; fi
-
-export NVM_DIR="$HOME/.nvm"
-  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+#   [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+#   [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/3.0.0/bin/:$PATH"
-
-# pip autocomplete
-eval "`pip completion --zsh`"
+# export PATH="/usr/local/opt/ruby/bin:/usr/local/lib/ruby/gems/3.0.0/bin/:$PATH"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -151,33 +164,44 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+# pip autocomplete
+eval "`pip completion --zsh`"
 # ensure conda env are displayed
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time anaconda)
-
-# JINA_CLI_BEGIN
-
-## autocomplete
-if [[ ! -o interactive ]]; then
-    return
-fi
-
-compctl -K _jina jina
-
-_jina() {
-  local words completions
-  read -cA words
-
-  if [ "${#words}" -eq 2 ]; then
-    completions="$(jina commands)"
-  else
-    completions="$(jina completions ${words[2,-2]})"
-  fi
-
-  reply=(${(ps:\n:)completions})
+export PATH="/var/folders/c5/qydz35lj19xc3nzbq8g886600000gn/T/fnm_multishells/30717_1635969082988/bin":$PATH
+export FNM_MULTISHELL_PATH="/var/folders/c5/qydz35lj19xc3nzbq8g886600000gn/T/fnm_multishells/30717_1635969082988"
+export FNM_DIR="/Users/gdupont/.fnm"
+export FNM_LOGLEVEL="info"
+export FNM_NODE_DIST_MIRROR="https://nodejs.org/dist"
+export FNM_ARCH="x64"
+autoload -U add-zsh-hook
+_fnm_autoload_hook () {
+    if [[ -f .node-version || -f .nvmrc ]]; then
+        fnm use
+    fi
 }
 
-# session-wise fix
-ulimit -n 4096
-export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+add-zsh-hook chpwd _fnm_autoload_hook \
+    && _fnm_autoload_hook
 
-# JINA_CLI_END
+export PATH="/var/folders/c5/qydz35lj19xc3nzbq8g886600000gn/T/fnm_multishells/30916_1635969182368/bin":$PATH
+export FNM_MULTISHELL_PATH="/var/folders/c5/qydz35lj19xc3nzbq8g886600000gn/T/fnm_multishells/30916_1635969182368"
+export FNM_DIR="/Users/gdupont/.fnm"
+export FNM_LOGLEVEL="info"
+export FNM_NODE_DIST_MIRROR="https://nodejs.org/dist"
+export FNM_ARCH="x64"
+autoload -U add-zsh-hook
+_fnm_autoload_hook () {
+    if [[ -f .node-version || -f .nvmrc ]]; then
+        fnm use
+    fi
+}
+
+add-zsh-hook chpwd _fnm_autoload_hook \
+    && _fnm_autoload_hook
+
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/gdupont/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/gdupont/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/gdupont/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/gdupont/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
